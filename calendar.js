@@ -10,12 +10,13 @@
   if (settings.keywords === oldKeywords) settings.keywords += ',饮食,飲食,营养,營養';
   settings.calendarIds = settings.calendarIds?.length ? settings.calendarIds : [settings.calendarId];
   let calendarNames = {};
+  let calendarsLoaded = false;
   let snapshot = null;
   let token = '', expires = 0, generation = 0, controller, busy = false;
   const section = document.createElement('section');
   section.className = 'card calendar-panel';
   section.innerHTML = `
-    <div class="title">📅 Google 日历 · 动态卡片 v6</div>
+    <div class="title">📅 Google 日历 · 动态卡片 v6.1</div>
     <div class="desc">训练动作、饮食和营养目标均来自所选日历。修改或删除日历内容后，下方卡片随刷新更新。</div>
     <details><summary>连接设置</summary>
       <label>Google OAuth 客户端 ID<input id="gc-client" placeholder="…apps.googleusercontent.com" autocomplete="off"></label>
@@ -39,6 +40,11 @@
     if (!token) {
       const hint = document.createElement('p'); hint.className = 'muted';
       hint.textContent = '连接 Google 后显示日历列表。手机和电脑需要分别连接。';
+      picker.append(hint); return;
+    }
+    if (!calendarsLoaded) {
+      const hint = document.createElement('p'); hint.className = 'muted';
+      hint.textContent = '已连接 Google，正在加载日历列表；未显示时可点击立即刷新。';
       picker.append(hint); return;
     }
     for (const option of $('gc-calendar').options) {
@@ -220,7 +226,9 @@
     controller = new AbortController(); const signal = controller.signal;
     busy = true; status('正在读取 Google 日历…');
     try {
-      if (loadCalendars) {
+      // A visibility refresh may cancel the first list request after mobile OAuth.
+      // Never skip discovery until a full list has actually loaded for this token.
+      if (loadCalendars || !calendarsLoaded) {
         const calendars = await getAll('users/me/calendarList', { maxResults: '250' }, signal, accessToken);
         if (current !== generation) return;
         const select = $('gc-calendar'); select.replaceChildren(new Option('主日历', 'primary'));
@@ -233,7 +241,8 @@
         }
         settings.calendarIds = settings.calendarIds.filter(id => [...select.options].some(o => o.value === id));
         if (!settings.calendarIds.length) settings.calendarIds = ['primary'];
-        [...select.options].forEach(o => { o.selected = settings.calendarIds.includes(o.value); }); persist(); drawCalendarChoices();
+        [...select.options].forEach(o => { o.selected = settings.calendarIds.includes(o.value); });
+        calendarsLoaded = true; persist(); drawCalendarChoices();
       }
       const next = new Date(`${date}T00:00:00+08:00`);
       next.setTime(next.getTime() + 86400000);
@@ -264,7 +273,7 @@
     if (location.protocol !== 'https:' && location.hostname !== 'localhost') { status('请在 GitHub Pages 的 HTTPS 地址中打开，不能通过双击 HTML 连接 Google。'); return; }
     if (!settings.clientId) { section.querySelector('details').open = true; status('请先在连接设置中保存 Google OAuth 客户端 ID。'); return; }
     if (!window.google?.accounts?.oauth2) { status('Google 登录组件尚未加载。请检查能否访问 Google，再重新打开页面。'); return; }
-    cancel(); token = ''; drawCalendarChoices(); clearEvents();
+    cancel(); token = ''; calendarsLoaded = false; drawCalendarChoices(); clearEvents();
     const attempt = generation;
     const client = google.accounts.oauth2.initTokenClient({
       client_id: settings.clientId, scope: SCOPES,
@@ -274,15 +283,16 @@
           status('连接未完成，需要允许读取日历及日历列表。'); return;
         }
         token = response.access_token; expires = Date.now() + Math.max(0, Number(response.expires_in) - 60) * 1000;
+        calendarsLoaded = false; drawCalendarChoices();
         settings.enabled = true; persist(); templateLabels(); refresh(true);
       },
       error_callback: () => { if (attempt === generation) status('登录窗口被关闭或拦截，请再次点击连接并允许弹出窗口。'); }
     });
     client.requestAccessToken({ prompt: 'select_account' });
   };
-  $('gc-refresh').onclick = () => refresh();
+  $('gc-refresh').onclick = () => refresh(true);
   $('gc-disconnect').onclick = () => {
-    cancel(); token = ''; expires = 0; settings.enabled = false; persist(); drawCalendarChoices(); clearEvents(); originalRender();
+    cancel(); token = ''; expires = 0; calendarsLoaded = false; settings.enabled = false; persist(); drawCalendarChoices(); clearEvents(); originalRender();
     status('已断开本页连接，恢复本机每周计划。可在 Google 账号的第三方应用设置中撤销授权。');
   };
   setInterval(() => { if (!document.hidden && token && !busy) refresh(); }, 60000);
