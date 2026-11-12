@@ -119,3 +119,8 @@ macros 单位克，数值非负；meals 最多30项，每项 name/description �
 现有资料 ID：dynamic-warmup、barbell-squat、romanian-deadlift、leg-curl、standing-calf-raise、pallof-press、serve-warmup、serve-toss、second-serve、first-serve、video-review、split-step、recover、forehand、bounce-reading。
 
 重复规则由 Google 管理。PWA 使用 singleEvents=true 展开实例，并关联 recurringEventId 与 originalStartTime，不另存星期模板。仅更改系列规则可能让 Google 生成不同实例身份；不保证自动关联到此前实例，原记录仍可在历史中找到。
+
+
+## V6.4 显示说明
+
+协议不变，训练参数仍严格来自JSON。默认只显示动作完成勾选，逐组字段在高级模式中开启。网球阶段依JSON顺序排列，开始时刻由事件start.dateTime与前面已提供的durationMinutes累加；缺少时长则不推测后续时刻。饮食摘要仅截短展示，详细建议保留完整内容。自由文本不生成计划卡片。

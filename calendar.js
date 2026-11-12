@@ -17,7 +17,7 @@
   const section = document.createElement('section');
   section.className = 'card calendar-panel';
   section.innerHTML = `
-    <div class="title">📅 Google 日历 · 日历计划 V6.3</div>
+    <details id="gc-settings"><summary>📅 日历连接与设置 · V6.4</summary>
     <div class="desc">计划仅来自 Google 日历。结构化 JSON 生成卡片；普通备注保留原文。离线时显示有时间标记的缓存。</div>
     <details><summary>连接设置</summary>
       <label>Google OAuth 客户端 ID<input id="gc-client" placeholder="…apps.googleusercontent.com" autocomplete="off"></label>
@@ -27,11 +27,12 @@
     <fieldset class="calendar-choices"><legend>选择日历（直接勾选，可多选）</legend><div id="gc-picker"></div></fieldset>
     <select id="gc-calendar" multiple hidden aria-hidden="true" tabindex="-1"><option value="primary">主日历</option></select>
     <div class="tools"><button id="gc-connect">连接 Google 日历</button><button id="gc-refresh">立即刷新</button><button id="gc-disconnect">断开连接</button></div>
-    <div class="status" id="gc-status" role="status" aria-live="polite"></div>
+    </details><div class="status" id="gc-status" role="status" aria-live="polite"></div>
     <div id="gc-events"></div>`;
   document.querySelector('#app').before(section);
   const $ = id => document.getElementById(id);
   $('gc-client').value = settings.clientId;
+  $('gc-settings').open = !settings.clientId;
   settings.calendarIds.filter(id => id !== 'primary').forEach(id => $('gc-calendar').add(new Option('上次选择的日历（连接后加载名称）', id)));
   [...$('gc-calendar').options].forEach(o => { o.selected = settings.calendarIds.includes(o.value); });
   function drawCalendarChoices() {
@@ -183,6 +184,7 @@
       const events = groups.flat().sort((a, b) => (a.start?.dateTime || a.start?.date || '').localeCompare(b.start?.dateTime || b.start?.date || ''));
       if (current !== generation || date !== activeDate) return;
       const result = showEvents(events, date);
+      if(loadCalendars)$('gc-settings').open=false;
       status(`${date} · ${result.count} 项安排 · 更新于 ${new Date().toLocaleTimeString('zh-CN', { timeZone: TZ })} · 页面可见时每分钟刷新${result.stored?'':' · 本机缓存保存失败，请检查存储空间'}`);
     } catch (error) {
       if (current !== generation || error.name === 'AbortError') return;

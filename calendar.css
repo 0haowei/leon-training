@@ -30,3 +30,20 @@
 
 
 header{background:#10171c}.nav{background:#162126}
+
+/* V6.4: compact overview; teaching is opt-in, records remain untouched. */
+header{padding:8px 14px}.brand{font-size:18px}.sub{display:none}.datebar{margin-top:6px}.days{padding-top:8px}.day{height:34px;min-width:38px}.datebar input{padding:5px}
+.workout-overview{font-size:15px;font-weight:700;color:#b5f1cb;margin:12px 0}
+.compact-list{display:grid;gap:8px}.exercise-card.compact{padding:10px 12px;margin:0;border-radius:12px;scroll-margin-top:135px}
+.compact-row{display:flex;gap:10px;align-items:center}.compact-body{flex:1;min-width:0}.compact h3{font-size:16px;line-height:1.3;margin:0 0 3px}.compact .prescription{font-size:14px;line-height:1.4;margin:0}.compact-tip{font-size:12px;line-height:1.45;color:#aebfc4;margin:4px 0 0}
+.compact .record-check{flex:0 0 44px;flex-direction:column;gap:2px;font-size:10px;justify-content:center}.compact .record-check input{margin:0;width:25px;height:25px}.compact-status:empty{display:none}.compact-status{font-size:12px;color:#eed6a7}.compact.completed{border-color:#60917c}
+.compact .exercise-more{margin:2px 0 0}.compact .exercise-more>summary{padding:3px 0;font-size:11px;min-height:24px}.compact .exercise-more[open]>summary{padding:8px 0}.plan-notes{font-size:12px;color:#b5f1cb;margin:12px 0}.food{align-items:flex-start}.calendar-event>.title{font-size:17px;margin:6px 0}.calendar-event>.desc{margin:4px 0}.calendar-event>.muted{font-size:11px}
+
+/* Final V6.4: 60–85px rows, clickable info area, no free-text inferred plans. */
+.compact-list{gap:0}.exercise-card.compact{border:0;border-bottom:1px solid #344249;background:transparent;border-radius:0;padding:0;margin:0}
+.compact-row{min-height:74px;padding:8px 0;gap:8px}.compact-body{display:block;border:0;background:none;color:inherit;text-align:left;padding:0;font:inherit;cursor:pointer;min-height:48px}
+.compact-heading{display:flex;flex-wrap:wrap;column-gap:8px;align-items:baseline}.compact h3{font-size:15px;line-height:20px;margin:0}.compact .prescription{font-size:12px;color:#c6d6d8;line-height:18px}.compact-tip{font-size:12px;line-height:17px;margin:3px 0 0}
+.compact .record-check{min-height:44px;flex-basis:36px}.compact .record-check span{display:none}.stage-clock{font-size:11px;color:#b5c7c8;flex:0 0 34px}
+.exercise-more[hidden]{display:none}.exercise-more:not([hidden]){padding:10px 0 16px;border-top:1px dashed #43585a}.exercise-more img{max-height:240px}.exercise-more li{font-size:13px;line-height:1.6}.compact-body:focus-visible{outline:2px solid #b5f1cb;outline-offset:3px}
+.workout-overview{font-size:13px;margin:10px 0 5px}.workout-progress{display:block;width:100%;height:5px;appearance:none;border:0;margin-bottom:4px}.workout-progress::-webkit-progress-bar{background:#304044;border-radius:4px}.workout-progress::-webkit-progress-value{background:#b5f1cb;border-radius:4px}.workout-progress::-moz-progress-bar{background:#b5f1cb}
+.food{min-height:64px;padding:10px 0;gap:10px}.foodicon{font-size:21px;width:24px;height:30px;background:none;flex:0 0 24px}.foodname{font-size:14px}.fooddesc{font-size:12px;line-height:1.45;margin-top:3px}.metric{padding:10px 5px}.metrics .num{font-size:24px}.advanced-option{display:flex;gap:8px;align-items:center;font-size:13px;min-height:44px}.advanced-option input{width:20px;height:20px}
