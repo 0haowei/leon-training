@@ -3,3 +3,6 @@
 .calendar-panel summary{cursor:pointer;color:#b5f1cb;padding:8px 0}
 .calendar-panel .title,.calendar-panel .muted,.calendar-panel .desc{overflow-wrap:anywhere}
 .calendar-panel button:focus-visible,.calendar-panel summary:focus-visible{outline:2px solid #b5f1cb;outline-offset:3px}
+
+#app .dname,#app .fooddesc,#app .title{overflow-wrap:anywhere} .calendar-panel select[multiple]{min-height:128px}
+

@@ -8,19 +8,22 @@
   const oldKeywords = '网球,tennis,体能,力量,恢复,发球,对拉,教练,激活';
   settings = { clientId: '', calendarId: 'primary', keywords: oldKeywords + ',饮食,飲食,营养,營養', enabled: false, ...settings };
   if (settings.keywords === oldKeywords) settings.keywords += ',饮食,飲食,营养,營養';
+  settings.calendarIds = settings.calendarIds?.length ? settings.calendarIds : [settings.calendarId];
+  let calendarNames = {};
+  let snapshot = null;
   let token = '', expires = 0, generation = 0, controller, busy = false;
   const section = document.createElement('section');
   section.className = 'card calendar-panel';
   section.innerHTML = `
-    <div class="title">📅 Google 日历 · 训练安排</div>
-    <div class="desc">以日历为准显示所选日期的安排和详细内容，包括饮食说明。下方动作卡片仅作训练模板参考；连接后不再显示固定饮食模板。</div>
+    <div class="title">📅 Google 日历 · 动态卡片 v5</div>
+    <div class="desc">训练动作、饮食和营养目标均来自所选日历。修改或删除日历内容后，下方卡片随刷新更新。</div>
     <details><summary>连接设置</summary>
       <label>Google OAuth 客户端 ID<input id="gc-client" placeholder="…apps.googleusercontent.com" autocomplete="off"></label>
       <label>训练关键词（逗号分隔；留空显示全部事件）<input id="gc-keywords"></label>
       <div class="status">首次使用请按随附的「Google日历配置.md」完成 Google 配置，无需客户端密钥。</div>
       <div class="tools"><button id="gc-save">保存设置</button></div>
     </details>
-    <label>选择日历<select id="gc-calendar"><option value="primary">主日历（连接后可选择其他日历）</option></select></label>
+    <label>选择日历（可多选，电脑按住 Ctrl 点击）<select id="gc-calendar" multiple size="4"><option value="primary">主日历</option></select></label>
     <div class="tools"><button id="gc-connect">连接 Google 日历</button><button id="gc-refresh">立即刷新</button><button id="gc-disconnect">断开连接</button></div>
     <div class="status" id="gc-status" role="status" aria-live="polite"></div>
     <div id="gc-events"></div>`;
@@ -28,30 +31,20 @@
   const $ = id => document.getElementById(id);
   $('gc-client').value = settings.clientId;
   $('gc-keywords').value = settings.keywords;
-  if (settings.calendarId !== 'primary') $('gc-calendar').add(new Option('上次选择的日历（连接后加载名称）', settings.calendarId));
-  $('gc-calendar').value = settings.calendarId;
+  settings.calendarIds.filter(id => id !== 'primary').forEach(id => $('gc-calendar').add(new Option('上次选择的日历（连接后加载名称）', id)));
+  [...$('gc-calendar').options].forEach(o => { o.selected = settings.calendarIds.includes(o.value); });
   const status = message => { $('gc-status').textContent = message; };
-  const clearEvents = () => $('gc-events').replaceChildren();
+  const clearEvents = () => { snapshot = null; $('gc-events').replaceChildren(); if (settings.enabled) drawCards(); };
   function persist() {
     try { localStorage.setItem(KEY, JSON.stringify(settings)); }
     catch { status('设置仅在本次页面有效：浏览器不允许保存设置。'); }
   }
   function cancel() { generation++; controller?.abort(); busy = false; }
   function templateLabels() {
-    if (!settings.enabled) return;
-    document.querySelectorAll('#app .cardhead .time').forEach(el => { el.textContent = '动作模板 · 非日历安排'; });
-    const eyebrow = document.querySelector('#app .eyebrow');
-    if (eyebrow) eyebrow.textContent = `${activeDate} · ${names[selected]} · 每周动作模板（实际安排见上方日历）`;
-    document.querySelectorAll('#app .section').forEach(heading => {
-      if (heading.textContent.includes('今日营养目标')) {
-        heading.textContent = '🍜 饮食以日历详细内容为准';
-        const card = heading.nextElementSibling;
-        if (card) card.hidden = true;
-      }
-    });
+    if (settings.enabled) drawCards();
   }
   const originalRender = render;
-  render = function () { originalRender(); templateLabels(); clearEvents(); refresh(); };
+  render = function () { originalRender(); templateLabels(); refresh(); };
   const addText = (parent, tag, text, className) => {
     const el = document.createElement(tag); el.textContent = text;
     if (className) el.className = className;
@@ -73,20 +66,105 @@
       }).replace(/\n{3,}/g, '\n\n').trim();
   }
   function showEvents(events, date) {
-    clearEvents();
     const keywords = settings.keywords.split(/[,，]/).map(s => s.trim().toLowerCase()).filter(Boolean);
     const filtered = events.filter(e => e.status !== 'cancelled' && !e.attendees?.some(a => a.self && a.responseStatus === 'declined') &&
-      (!keywords.length || keywords.some(k => `${e.summary || ''} ${e.description || ''}`.toLowerCase().includes(k))));
-    if (!filtered.length) addText($('gc-events'), 'p', `${date} 没有符合筛选条件的日历安排。可检查日历选择或调整关键词。`, 'muted');
-    for (const event of filtered) {
-      const card = addText($('gc-events'), 'article', '', 'card');
+      (sourceCategory(e._calendarName) !== 'other' || !keywords.length || keywords.some(k => `${e.summary || ''} ${e.description || ''}`.toLowerCase().includes(k))));
+    snapshot = { date, events: filtered };
+    // Do not interrupt an unfinished weight input during the automatic poll.
+    if (!document.activeElement?.matches?.('#app input')) drawCards();
+    return filtered.length;
+  }
+  function sourceCategory(title = '') {
+    if (/饮食|飲食|营养|營養|早餐|午餐|晚餐|加餐|nutrition|meal/i.test(title)) return 'food';
+    if (/力量|体能|體能|恢复|恢復|激活|核心|上肢|下肢|健身|strength|fitness/i.test(title)) return 'fitness';
+    if (/网球|網球|tennis|发球|發球|对拉|對拉|教练|教練|击球|擊球/i.test(title)) return 'tennis';
+    return 'other';
+  }
+  function category(event) {
+    const source = sourceCategory(event._calendarName);
+    return source !== 'other' ? source : sourceCategory(event.summary || '');
+  }
+  function foodParts(text) {
+    const meals = [], notes = [];
+    for (const raw of text.split('\n')) {
+      const line = raw.trim(); if (!line) continue;
+      const m = line.match(/^(?:[🍌🍚🐟🥛💧🥪🍜\s•*\-]*)?(早餐|午餐|晚餐|加餐|训练前加餐|訓練前加餐|训练后加餐|訓練後加餐|运动补水|運動補水|补水|補水)[：:]\s*(.*)$/u);
+      if (m) { if (m[2].trim()) meals.push({ name: m[1], text: m[2].trim() }); }
+      else notes.push(line);
+    }
+    return { meals, notes };
+  }
+  function recordKey(event, line, occurrence, field) {
+    // Full encoded identifiers avoid associating records with a different row after edits/reordering.
+    const identity = [event._calendarId || settings.calendarId, event.id || event.summary,
+      event.originalStartTime?.dateTime || event.originalStartTime?.date || '', line, occurrence];
+    return STORE + activeDate + ':calendar:' + encodeURIComponent(JSON.stringify(identity)) + ':' + field;
+  }
+  function drawCards() {
+    const app = $('app'); app.replaceChildren();
+    const summary = addText(app, 'div', '', 'summary');
+    addText(summary, 'div', `${activeDate} · ${names[selected]} · Google 日历`, 'eyebrow');
+    addText(summary, 'div', '今日训练与饮食', 'big');
+    addText(summary, 'div', '卡片来自日历；打卡和重量保存在本机。', 'muted');
+    if (!snapshot || snapshot.date !== activeDate) {
+      addText(app, 'p', '等待读取当天日历，请查看上方连接状态。', 'muted'); return;
+    }
+    const events = snapshot.events.filter(e => tab === 'all' || category(e) === tab);
+    if (!events.length) addText(app, 'p', '当天没有符合当前分类的日历内容。可检查日期、所选日历与筛选关键词。', 'muted');
+    for (const event of events) {
+      const type = category(event);
+      const card = addText(app, 'article', '', 'card');
       addText(card, 'div', event.summary || '未命名事件', 'title');
       const when = event.start?.date ? `全天 · ${event.start.date} 至 ${event.end?.date || event.start.date}（结束日期不含当天）` :
         `${time(event.start.dateTime)} — ${time(event.end.dateTime)} · 北京时间`;
       addText(card, 'div', when, 'desc');
+      if (event._calendarName) addText(card, 'div', '来自 ' + event._calendarName, 'muted');
       if (event.location) addText(card, 'div', event.location, 'muted');
-      const description = addText(card, 'div', descriptionText(event.description) || '此事件没有详细说明。', 'desc');
-      description.style.whiteSpace = 'pre-wrap';
+      const text = descriptionText(event.description);
+      if (type === 'food') {
+        const metrics = [['蛋白质', /(?:蛋白质|蛋白質|蛋白)\s*[：:]?\s*(\d+(?:\.\d+)?)\s*g/i], ['碳水', /碳水(?:化合物)?\s*[：:]?\s*(\d+(?:\.\d+)?)\s*g/i], ['脂肪', /脂肪\s*[：:]?\s*(\d+(?:\.\d+)?)\s*g/i]];
+        const values = metrics.map(([name, re]) => [name, (text.match(re) || (event.summary || '').match(re))?.[1]]).filter(([, value]) => value !== undefined);
+        if (values.length) {
+          const grid = addText(card, 'div', '', 'metrics');
+          for (const [name, value] of values) { const m = addText(grid, 'div', '', 'metric'); addText(m, 'div', value, 'num'); addText(m, 'div', name + ' g', 'unit'); }
+        }
+        const { meals, notes } = foodParts(text);
+        for (const meal of meals) {
+          const row = addText(card, 'div', '', 'food');
+          const icon = /早餐/.test(meal.name) ? '🍌' : /午餐/.test(meal.name) ? '🍚' : /晚餐/.test(meal.name) ? '🐟' : /水/.test(meal.name) ? '💧' : '🥛';
+          addText(row, 'div', icon, 'foodicon'); const content = addText(row, 'div', '');
+          addText(content, 'div', meal.name, 'foodname'); addText(content, 'div', meal.text, 'fooddesc');
+        }
+        if (notes.length) { const note = addText(card, 'div', notes.join('\n'), 'desc'); note.style.whiteSpace = 'pre-wrap'; }
+        if (!meals.length && !notes.length) addText(card, 'p', '日历中没有填写饮食内容。', 'muted');
+      } else if (type === 'fitness' || type === 'tennis') {
+        const lines = text.split('\n').map(s => s.trim()).filter(Boolean);
+        const duplicates = new Map();
+        for (const line of lines) {
+          const occurrence = duplicates.get(line) || 0; duplicates.set(line, occurrence + 1);
+          const row = addText(card, 'div', '', 'drill');
+          const art = addText(row, 'div', '', 'art');
+          const kind = type === 'tennis' ? 'tennis' : /蹲/.test(line) ? 'squat' : /硬拉|臀桥/.test(line) ? 'hinge' : /提踵/.test(line) ? 'calf' : /划船|下拉/.test(line) ? 'row' : /推|外旋/.test(line) ? 'press' : 'lunge';
+          art.innerHTML = svg(kind);
+          const content = addText(row, 'div', '', 'dcontent');
+          const parts = line.split(/[|｜]/).map(s => s.trim());
+          addText(content, 'div', parts[0], 'dname');
+          if (parts[1]) addText(content, 'div', parts[1], 'dmeta');
+          if (parts.length > 2) addText(content, 'div', parts.slice(2).join(' · '), 'dhelp');
+          const doneKey = recordKey(event, line, occurrence, 'done');
+          const done = addText(row, 'input', '', 'tick'); done.type = 'checkbox'; done.checked = safeGet(doneKey) === '1';
+          done.setAttribute('aria-label', '完成 ' + line);
+          done.onchange = () => safeSet(doneKey, done.checked ? '1' : '0');
+          if (type === 'fitness') {
+            const weightKey = recordKey(event, line, occurrence, 'weight');
+            const label = addText(content, 'label', '本次重量（kg，可选）', 'weightline');
+            const input = addText(label, 'input', ''); input.type = 'number'; input.min = '0'; input.max = '1000'; input.step = '0.5'; input.value = safeGet(weightKey) || '';
+            input.onchange = () => { if (input.value === '' || (Number(input.value) >= 0 && Number(input.value) <= 1000)) safeSet(weightKey, input.value); };
+            input.onblur = () => setTimeout(() => { if (settings.enabled && !document.activeElement?.matches?.('#app input')) drawCards(); }, 0);
+          }
+        }
+        if (!lines.length) addText(card, 'p', '日历中没有填写动作明细，可在事件描述中每行填写一项。', 'muted');
+      } else { const note = addText(card, 'div', text || '此事件没有详细说明。', 'desc'); note.style.whiteSpace = 'pre-wrap'; }
       if (event.htmlLink) {
         try {
           const url = new URL(event.htmlLink);
@@ -97,7 +175,6 @@
         } catch { /* Ignore invalid external links. */ }
       }
     }
-    return filtered.length;
   }
   async function getAll(path, params, signal, accessToken) {
     const items = []; let pageToken;
@@ -120,7 +197,7 @@
   async function refresh(loadCalendars = false) {
     cancel();
     if (!settings.enabled) { status('尚未连接 · 当前使用本机每周计划'); return; }
-    if (!navigator.onLine) { clearEvents(); status('当前离线，无法确认日历安排；下方动作模板仍可使用。'); return; }
+    if (!navigator.onLine) { clearEvents(); status('当前离线，无法读取最新卡片。本机打卡记录仍保留。'); return; }
     if (!token || Date.now() >= expires) { token = ''; clearEvents(); status('请点击「连接 Google 日历」读取最新安排。重新打开网页或授权到期后需要再次连接。'); return; }
     const current = generation, date = activeDate, accessToken = token;
     controller = new AbortController(); const signal = controller.signal;
@@ -130,16 +207,25 @@
         const calendars = await getAll('users/me/calendarList', { maxResults: '250' }, signal, accessToken);
         if (current !== generation) return;
         const select = $('gc-calendar'); select.replaceChildren(new Option('主日历', 'primary'));
-        calendars.forEach(c => select.add(new Option(c.summaryOverride || c.summary || c.id, c.id)));
-        if (![...select.options].some(o => o.value === settings.calendarId)) settings.calendarId = 'primary';
-        select.value = settings.calendarId; persist();
+        calendarNames = Object.fromEntries(calendars.map(c => [c.primary ? 'primary' : c.id, c.summaryOverride || c.summary || c.id]));
+        calendars.filter(c => !c.primary).forEach(c => select.add(new Option(c.summaryOverride || c.summary || c.id, c.id)));
+        if (!settings.dynamicCardsConfigured) {
+          const training = calendars.filter(c => /饮食日历|飲食日曆|网球训练|網球訓練|体能训练|體能訓練/.test(c.summaryOverride || c.summary || '')).map(c => c.primary ? 'primary' : c.id);
+          if (training.length) settings.calendarIds = training;
+          settings.dynamicCardsConfigured = true;
+        }
+        settings.calendarIds = settings.calendarIds.filter(id => [...select.options].some(o => o.value === id));
+        if (!settings.calendarIds.length) settings.calendarIds = ['primary'];
+        [...select.options].forEach(o => { o.selected = settings.calendarIds.includes(o.value); }); persist();
       }
       const next = new Date(`${date}T00:00:00+08:00`);
       next.setTime(next.getTime() + 86400000);
-      const events = await getAll(`calendars/${encodeURIComponent(settings.calendarId)}/events`, {
+      if (!settings.calendarIds.length) { clearEvents(); status('请至少选择一个日历。'); return; }
+      const groups = await Promise.all(settings.calendarIds.map(async id => (await getAll(`calendars/${encodeURIComponent(id)}/events`, {
         timeMin: `${date}T00:00:00+08:00`, timeMax: next.toISOString(), timeZone: TZ,
         singleEvents: 'true', orderBy: 'startTime', showDeleted: 'false', maxResults: '250'
-      }, signal, accessToken);
+      }, signal, accessToken)).map(e => ({ ...e, _calendarId: id, _calendarName: calendarNames[id] || '' }))));
+      const events = groups.flat().sort((a, b) => (a.start?.dateTime || a.start?.date || '').localeCompare(b.start?.dateTime || b.start?.date || ''));
       if (current !== generation || date !== activeDate) return;
       const count = showEvents(events, date);
       status(`${date} · ${count} 项安排 · 更新于 ${new Date().toLocaleTimeString('zh-CN', { timeZone: TZ })} · 页面可见时每分钟刷新`);
@@ -156,7 +242,7 @@
     settings.clientId = id; settings.keywords = $('gc-keywords').value.trim(); persist();
     status('设置已保存。请连接 Google 日历，或点击立即刷新。');
   };
-  $('gc-calendar').onchange = () => { settings.calendarId = $('gc-calendar').value; persist(); clearEvents(); refresh(); };
+  $('gc-calendar').onchange = () => { settings.calendarIds = [...$('gc-calendar').selectedOptions].map(o => o.value); settings.calendarId = settings.calendarIds[0] || 'primary'; persist(); clearEvents(); refresh(); };
   $('gc-connect').onclick = () => {
     if (location.protocol !== 'https:' && location.hostname !== 'localhost') { status('请在 GitHub Pages 的 HTTPS 地址中打开，不能通过双击 HTML 连接 Google。'); return; }
     if (!settings.clientId) { section.querySelector('details').open = true; status('请先在连接设置中保存 Google OAuth 客户端 ID。'); return; }
