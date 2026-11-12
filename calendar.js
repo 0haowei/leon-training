@@ -5,13 +5,15 @@
   const SCOPES = 'https://www.googleapis.com/auth/calendar.events.readonly https://www.googleapis.com/auth/calendar.calendarlist.readonly';
   let settings;
   try { settings = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { settings = {}; }
-  settings = { clientId: '', calendarId: 'primary', keywords: '网球,tennis,体能,力量,恢复,发球,对拉,教练,激活', enabled: false, ...settings };
+  const oldKeywords = '网球,tennis,体能,力量,恢复,发球,对拉,教练,激活';
+  settings = { clientId: '', calendarId: 'primary', keywords: oldKeywords + ',饮食,飲食,营养,營養', enabled: false, ...settings };
+  if (settings.keywords === oldKeywords) settings.keywords += ',饮食,飲食,营养,營養';
   let token = '', expires = 0, generation = 0, controller, busy = false;
   const section = document.createElement('section');
   section.className = 'card calendar-panel';
   section.innerHTML = `
     <div class="title">📅 Google 日历 · 训练安排</div>
-    <div class="desc">以日历为准显示所选日期的安排。连接期间自动刷新；下面的动作卡片作为每周训练模板参考。</div>
+    <div class="desc">以日历为准显示所选日期的安排和详细内容，包括饮食说明。下方动作卡片仅作训练模板参考；连接后不再显示固定饮食模板。</div>
     <details><summary>连接设置</summary>
       <label>Google OAuth 客户端 ID<input id="gc-client" placeholder="…apps.googleusercontent.com" autocomplete="off"></label>
       <label>训练关键词（逗号分隔；留空显示全部事件）<input id="gc-keywords"></label>
@@ -40,6 +42,13 @@
     document.querySelectorAll('#app .cardhead .time').forEach(el => { el.textContent = '动作模板 · 非日历安排'; });
     const eyebrow = document.querySelector('#app .eyebrow');
     if (eyebrow) eyebrow.textContent = `${activeDate} · ${names[selected]} · 每周动作模板（实际安排见上方日历）`;
+    document.querySelectorAll('#app .section').forEach(heading => {
+      if (heading.textContent.includes('今日营养目标')) {
+        heading.textContent = '🍜 饮食以日历详细内容为准';
+        const card = heading.nextElementSibling;
+        if (card) card.hidden = true;
+      }
+    });
   }
   const originalRender = render;
   render = function () { originalRender(); templateLabels(); clearEvents(); refresh(); };
@@ -49,6 +58,20 @@
     parent.append(el); return el;
   };
   const time = value => new Intl.DateTimeFormat('zh-CN', { timeZone: TZ, month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date(value));
+  // Produce text only. Never insert calendar-supplied HTML into the live DOM.
+  function descriptionText(value) {
+    const entities = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' };
+    return String(value || '')
+      .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, '')
+      .replace(/<br\b[^>]*>/gi, '\n')
+      .replace(/<\/(?:div|p|li|ul|ol|h[1-6]|tr)\s*>/gi, '\n')
+      .replace(/<\/?[a-z][^>]*>/gi, '')
+      .replace(/&(#x[0-9a-f]+|#\d+|amp|lt|gt|quot|apos|nbsp);/gi, (whole, code) => {
+        if (code[0] !== '#') return entities[code.toLowerCase()] || whole;
+        const n = code[1].toLowerCase() === 'x' ? parseInt(code.slice(2), 16) : Number(code.slice(1));
+        return n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : '';
+      }).replace(/\n{3,}/g, '\n\n').trim();
+  }
   function showEvents(events, date) {
     clearEvents();
     const keywords = settings.keywords.split(/[,，]/).map(s => s.trim().toLowerCase()).filter(Boolean);
@@ -62,6 +85,8 @@
         `${time(event.start.dateTime)} — ${time(event.end.dateTime)} · 北京时间`;
       addText(card, 'div', when, 'desc');
       if (event.location) addText(card, 'div', event.location, 'muted');
+      const description = addText(card, 'div', descriptionText(event.description) || '此事件没有详细说明。', 'desc');
+      description.style.whiteSpace = 'pre-wrap';
       if (event.htmlLink) {
         try {
           const url = new URL(event.htmlLink);
