@@ -1,0 +1,521 @@
+{
+  "schema": "leon-exercises/v1",
+  "exercises": [
+    {
+      "exerciseId": "dynamic-warmup",
+      "nameZh": "动态热身",
+      "nameEn": "Dynamic Warm-up",
+      "category": "recovery",
+      "aliases": [
+        "热身",
+        "肩胛热身"
+      ],
+      "image": {
+        "src": "assets/exercises/dynamic-warmup.svg",
+        "alt": "动态热身自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "从轻松活动开始。",
+        "逐步活动髋、踝和肩。",
+        "使用可控制的动作范围。"
+      ],
+      "commonErrors": [
+        "突然进入高强度动作。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [],
+      "recordType": "duration"
+    },
+    {
+      "exerciseId": "barbell-squat",
+      "nameZh": "杠铃深蹲",
+      "nameEn": "Barbell Squat",
+      "category": "strength",
+      "aliases": [
+        "深蹲",
+        "杠铃背蹲"
+      ],
+      "image": {
+        "src": "assets/exercises/barbell-squat.svg",
+        "alt": "杠铃深蹲自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "双脚稳定，重心保持在支撑面内。",
+        "屈髋屈膝，躯干保持稳定。",
+        "控制下降和起身，不靠反弹。"
+      ],
+      "commonErrors": [
+        "膝盖内扣。",
+        "腰背失去稳定。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [
+        {
+          "source": "ACE",
+          "title": "Back Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/11/back-squat/",
+          "kind": "article",
+          "verifiedAt": "2026-11-13",
+          "verification": "动作专页标题与内容已核对；视频播放器可能要求网站 Cookie 或网络访问。"
+        },
+        {
+          "source": "NSCA",
+          "title": "深蹲技术与教练提示",
+          "url": "https://www.nsca.com/education/videos/the-squathow-it-improves-athletic-performance/",
+          "kind": "video",
+          "verifiedAt": "2026-11-13",
+          "verification": "动作专页标题与内容已核对；视频播放器可能要求网站 Cookie 或网络访问。"
+        }
+      ],
+      "recordType": "strength"
+    },
+    {
+      "exerciseId": "romanian-deadlift",
+      "nameZh": "罗马尼亚硬拉",
+      "nameEn": "Romanian Deadlift",
+      "category": "strength",
+      "aliases": [
+        "罗马尼亚硬拉 RDL",
+        "RDL",
+        "硬拉"
+      ],
+      "image": {
+        "src": "assets/exercises/romanian-deadlift.svg",
+        "alt": "罗马尼亚硬拉自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "膝微屈，髋部向后移动。",
+        "负重靠近腿部，维持躯干稳定。",
+        "在可控范围内完成髋伸展。"
+      ],
+      "commonErrors": [
+        "把髋铰链做成深蹲。",
+        "负重远离身体。",
+        "腰背弯曲代偿。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [
+        {
+          "source": "ACE",
+          "title": "Romanian Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/317/romanian-deadlift/",
+          "kind": "article",
+          "verifiedAt": "2026-11-13",
+          "verification": "动作专页标题与内容已核对；视频播放器可能要求网站 Cookie 或网络访问。"
+        },
+        {
+          "source": "CSCCa",
+          "title": "Barbell Romanian Deadlift",
+          "url": "https://www.cscca.org/content.aspx?club_id=408309&module_id=732309&page_id=22",
+          "kind": "video",
+          "verifiedAt": "2026-11-13",
+          "verification": "动作专页标题与内容已核对；视频播放器可能要求网站 Cookie 或网络访问。"
+        }
+      ],
+      "recordType": "strength"
+    },
+    {
+      "exerciseId": "leg-curl",
+      "nameZh": "腿弯举",
+      "nameEn": "Leg Curl",
+      "category": "strength",
+      "aliases": [
+        "腿弯举"
+      ],
+      "image": {
+        "src": "assets/exercises/leg-curl.svg",
+        "alt": "腿弯举自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "先按器械说明调整座椅和转轴。",
+        "骨盆保持稳定，控制屈膝。",
+        "缓慢回放，不让配重撞击。"
+      ],
+      "commonErrors": [
+        "借助躯干摆动。",
+        "器械转轴与膝部不匹配。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [],
+      "recordType": "strength"
+    },
+    {
+      "exerciseId": "standing-calf-raise",
+      "nameZh": "站姿提踵",
+      "nameEn": "Standing Calf Raise",
+      "category": "strength",
+      "aliases": [
+        "站姿提踵",
+        "提踵",
+        "轻量提踵"
+      ],
+      "image": {
+        "src": "assets/exercises/standing-calf-raise.svg",
+        "alt": "站姿提踵自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "前脚掌稳定受力。",
+        "缓慢抬起和放下脚跟。",
+        "需要时使用支撑维持平衡。"
+      ],
+      "commonErrors": [
+        "快速弹震。",
+        "身体前后摇摆。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [
+        {
+          "source": "ACE",
+          "title": "Calf Raises",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/51/calf-raises/",
+          "kind": "article",
+          "verifiedAt": "2026-11-13",
+          "verification": "动作专页标题与内容已核对；视频播放器可能要求网站 Cookie 或网络访问。"
+        }
+      ],
+      "recordType": "strength"
+    },
+    {
+      "exerciseId": "pallof-press",
+      "nameZh": "抗旋转推举",
+      "nameEn": "Pallof Press",
+      "category": "strength",
+      "aliases": [
+        "Pallof Press",
+        "抗旋转训练"
+      ],
+      "image": {
+        "src": "assets/exercises/pallof-press.svg",
+        "alt": "抗旋转推举自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "身体侧对阻力方向。",
+        "双手从胸前平稳推出。",
+        "保持躯干朝前，不跟随阻力旋转。"
+      ],
+      "commonErrors": [
+        "转动躯干完成动作。",
+        "负重过大导致失稳。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [],
+      "recordType": "strength"
+    },
+    {
+      "exerciseId": "serve-warmup",
+      "nameZh": "热身与空挥",
+      "nameEn": "Serve Warm-up & Shadow Swing",
+      "category": "tennis",
+      "aliases": [
+        "肩部热身与空挥",
+        "热身和空挥",
+        "热身与空挥"
+      ],
+      "image": {
+        "src": "assets/exercises/serve-warmup.svg",
+        "alt": "热身与空挥自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "先活动肩部并进入舒适节奏。",
+        "空挥时关注连贯性。",
+        "从轻松速度开始。"
+      ],
+      "commonErrors": [
+        "未热身就全力挥拍。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [],
+      "recordType": "duration"
+    },
+    {
+      "exerciseId": "serve-toss",
+      "nameZh": "抛球与连续节奏",
+      "nameEn": "Serve Toss & Rhythm",
+      "category": "tennis",
+      "aliases": [
+        "抛球与连续节奏",
+        "抛球及连贯节奏"
+      ],
+      "image": {
+        "src": "assets/exercises/serve-toss.svg",
+        "alt": "抛球与连续节奏自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "重复练习可控的抛球位置。",
+        "抛球与挥拍动作衔接。",
+        "关注击球位置，不追求速度。"
+      ],
+      "commonErrors": [
+        "抛球忽高忽低。",
+        "为追球破坏平衡。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [
+        {
+          "source": "USTA",
+          "title": "Tennis 101: Perfecting the Serve",
+          "url": "https://www.usta.com/en/home/improve/tips-and-instruction/national/learning-the-basics--serve.html",
+          "kind": "article",
+          "verifiedAt": "2026-11-13",
+          "verification": "动作专页标题与内容已核对；视频播放器可能要求网站 Cookie 或网络访问。"
+        }
+      ],
+      "recordType": "duration"
+    },
+    {
+      "exerciseId": "second-serve",
+      "nameZh": "二发旋转与落点",
+      "nameEn": "Second Serve Placement",
+      "category": "tennis",
+      "aliases": [
+        "二发旋转落点",
+        "二发旋转与落点"
+      ],
+      "image": {
+        "src": "assets/exercises/second-serve.svg",
+        "alt": "二发旋转与落点自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "先明确目标落点。",
+        "记录入区数量和总发球数。",
+        "保持可控节奏与稳定动作。"
+      ],
+      "commonErrors": [
+        "为了球速牺牲稳定性。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [
+        {
+          "source": "USTA",
+          "title": "发球落点练习（通用发球落点）",
+          "url": "https://www.usta.com/en/home/improve/tips-and-instruction/national/tennis-techniques--service-placement.html",
+          "kind": "video",
+          "verifiedAt": "2026-11-13",
+          "verification": "动作专页标题与内容已核对；视频播放器可能要求网站 Cookie 或网络访问。"
+        }
+      ],
+      "recordType": "serve"
+    },
+    {
+      "exerciseId": "first-serve",
+      "nameZh": "一发落点",
+      "nameEn": "First Serve Placement",
+      "category": "tennis",
+      "aliases": [
+        "一发落点"
+      ],
+      "image": {
+        "src": "assets/exercises/first-serve.svg",
+        "alt": "一发落点自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "每组先选定目标区域。",
+        "观察落点而不只看球速。",
+        "记录成功率供复盘。"
+      ],
+      "commonErrors": [
+        "连续全力发球而失去动作质量。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [
+        {
+          "source": "USTA",
+          "title": "Service placement",
+          "url": "https://www.usta.com/en/home/improve/tips-and-instruction/national/tennis-techniques--service-placement.html",
+          "kind": "video",
+          "verifiedAt": "2026-11-13",
+          "verification": "动作专页标题与内容已核对；视频播放器可能要求网站 Cookie 或网络访问。"
+        }
+      ],
+      "recordType": "serve"
+    },
+    {
+      "exerciseId": "video-review",
+      "nameZh": "录像与复盘",
+      "nameEn": "Video Review",
+      "category": "tennis",
+      "aliases": [
+        "录像总结",
+        "录像与复盘",
+        "总结"
+      ],
+      "image": {
+        "src": "assets/exercises/video-review.svg",
+        "alt": "录像与复盘自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "选择一段有代表性的录像。",
+        "每次只检查一个技术目标。",
+        "记录感受和下一次关注点。"
+      ],
+      "commonErrors": [
+        "同时追踪过多技术细节。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [],
+      "recordType": "duration"
+    },
+    {
+      "exerciseId": "split-step",
+      "nameZh": "垫步启动",
+      "nameEn": "Split Step",
+      "category": "tennis",
+      "aliases": [
+        "Split Step",
+        "垫步启动"
+      ],
+      "image": {
+        "src": "assets/exercises/split-step.svg",
+        "alt": "垫步启动自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "观察对手击球节奏。",
+        "轻落地后准备向来球方向启动。",
+        "保持膝髋可灵活调整。"
+      ],
+      "commonErrors": [
+        "落地后站直不动。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [],
+      "recordType": "duration"
+    },
+    {
+      "exerciseId": "recover",
+      "nameZh": "击球后回位",
+      "nameEn": "Recover",
+      "category": "tennis",
+      "aliases": [
+        "Recover",
+        "击球后回位",
+        "移动击球与回位"
+      ],
+      "image": {
+        "src": "assets/exercises/recover.svg",
+        "alt": "击球后回位自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "击球后重新观察对手位置。",
+        "调整到能覆盖下一拍的位置。",
+        "再次准备启动。"
+      ],
+      "commonErrors": [
+        "击球后停留原地。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [],
+      "recordType": "duration"
+    },
+    {
+      "exerciseId": "forehand",
+      "nameZh": "正手练习",
+      "nameEn": "Forehand Practice",
+      "category": "tennis",
+      "aliases": [
+        "正手转肩引拍",
+        "正手转肩与引拍",
+        "正手斜线"
+      ],
+      "image": {
+        "src": "assets/exercises/forehand.svg",
+        "alt": "正手练习自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "提前准备并观察来球。",
+        "在可控的击球空间完成动作。",
+        "击球后恢复准备姿势。"
+      ],
+      "commonErrors": [
+        "准备过晚。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [],
+      "recordType": "duration"
+    },
+    {
+      "exerciseId": "bounce-reading",
+      "nameZh": "弹跳判断",
+      "nameEn": "Bounce Reading",
+      "category": "tennis",
+      "aliases": [
+        "手抛球弹跳判断",
+        "判断弹跳"
+      ],
+      "image": {
+        "src": "assets/exercises/bounce-reading.svg",
+        "alt": "弹跳判断自制动作示意（非完整教学）",
+        "license": "Original Leon schematic; CC0-1.0",
+        "creator": "Leon Training"
+      },
+      "tips": [
+        "观察落地点。",
+        "调整与球的距离。",
+        "从慢速喂球开始。"
+      ],
+      "commonErrors": [
+        "过早停止移动。"
+      ],
+      "safety": [
+        "出现疼痛或明显不适时停止该动作，必要时请教练确认动作。"
+      ],
+      "resources": [],
+      "recordType": "duration"
+    }
+  ]
+}

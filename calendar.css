@@ -12,4 +12,21 @@
 .calendar-panel .calendar-choice input{display:block;flex:0 0 24px;width:24px;height:24px;margin:0;padding:0;accent-color:#b5f1cb}
 .calendar-choice span{min-width:0;overflow-wrap:anywhere}
 .calendar-choice:focus-within{outline:2px solid #b5f1cb;outline-offset:2px}
+.exercise-card{border:1px solid #45605f;border-radius:18px;padding:16px;margin:20px 0;background:#203137;min-width:0}
+.exercise-card{scroll-margin-top:200px}
+.exercise-card h3{font-size:19px;line-height:1.45;margin:0 0 14px;overflow-wrap:anywhere}
+.exercise-card figure{margin:0 0 14px}.exercise-card img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;border-radius:12px;background:#15282e}
+.exercise-card figcaption{font-size:11px;color:#9eb0b9;margin-top:5px}.resource-placeholder{display:grid;place-items:center;aspect-ratio:16/9;border:1px dashed #688184;border-radius:12px;padding:20px;color:#b1c4c8;text-align:center}
+.prescription{font-size:19px;font-weight:750;color:#b5f1cb;margin:12px 0}.exercise-tips{padding-left:24px;color:#d5e1e3;font-size:14px;line-height:1.8}
+.exercise-card details,.raw-notes{margin:12px 0;line-height:1.7;font-size:13px}.exercise-card summary,.raw-notes summary{padding:10px 0;cursor:pointer;color:#b5f1cb}
+.resources{display:flex;flex-direction:column;align-items:flex-start;gap:7px}.resources a{min-height:44px;padding:12px;overflow-wrap:anywhere}
+.record-status{font-size:12px;line-height:1.6;color:#b5f1cb;min-height:22px;margin:12px 0}
+.record-check{display:flex;align-items:center;gap:10px;min-height:48px;cursor:pointer}.record-check input{width:26px;height:26px;accent-color:#b5f1cb;flex:0 0 26px}
+.set-row{border:1px solid #526d70;border-radius:12px;padding:12px;margin:12px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;min-width:0}.set-row legend{padding:0 6px;color:#c5e3d1;font-size:13px;overflow-wrap:anywhere}.set-row .record-check{grid-column:1/-1}
+.record-field{display:flex;flex-direction:column;gap:7px;font-size:13px;min-width:0;color:#bdced1}.record-field input,.record-field textarea{min-width:0;width:100%;max-width:100%;min-height:44px;border:1px solid #648084;border-radius:9px;background:#112328;color:#fff;padding:10px;font:16px sans-serif}.record-field textarea{min-height:85px;resize:vertical}.tennis-records{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.success-rate{grid-column:1/-1;font-size:18px;color:#b5f1cb}
+.raw-notes pre,#historyPanel pre{white-space:pre-wrap;overflow-wrap:anywhere;font-family:inherit;font-size:13px;color:#bdced1}#historyPanel details{border-top:1px solid #43575f;padding:12px 0;overflow-wrap:anywhere}#historyPanel summary{cursor:pointer;line-height:1.6}#historyPanel small{display:block;color:#a1b5bd}
+.calendar-event h2{line-height:1.5;overflow-wrap:anywhere}.food>div:last-child{min-width:0;overflow-wrap:anywhere}.foodicon{flex:0 0 55px}
+@media(max-width:390px){main{padding-left:10px;padding-right:10px}.calendar-event{padding:10px}.exercise-card{padding:12px}.datebar{gap:6px}.datebar input{max-width:145px}.nav{padding-left:8px;padding-right:8px}.nav button{font-size:12px}}
 
+
+header{background:#10171c}.nav{background:#162126}
