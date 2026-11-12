@@ -4,5 +4,12 @@
 .calendar-panel .title,.calendar-panel .muted,.calendar-panel .desc{overflow-wrap:anywhere}
 .calendar-panel button:focus-visible,.calendar-panel summary:focus-visible{outline:2px solid #b5f1cb;outline-offset:3px}
 
-#app .dname,#app .fooddesc,#app .title{overflow-wrap:anywhere} .calendar-panel select[multiple]{min-height:128px}
+#app .dname,#app .fooddesc,#app .title{overflow-wrap:anywhere}
+.calendar-panel #gc-calendar{display:none!important}
+.calendar-choices{min-width:0;margin:16px 0 0;padding:10px;border:1px solid #536b70;border-radius:12px}
+.calendar-choices legend{font-size:13px;color:#b6c3c9;padding:0 5px}
+.calendar-panel .calendar-choice{display:flex;align-items:center;gap:12px;margin:5px 0;padding:10px;min-height:48px;background:#102025;border-radius:9px;cursor:pointer;font-size:16px;color:#eaf0f2}
+.calendar-panel .calendar-choice input{display:block;flex:0 0 24px;width:24px;height:24px;margin:0;padding:0;accent-color:#b5f1cb}
+.calendar-choice span{min-width:0;overflow-wrap:anywhere}
+.calendar-choice:focus-within{outline:2px solid #b5f1cb;outline-offset:2px}
 
