@@ -1,0 +1,26 @@
+{
+  "id": "./",
+  "name": "Leon Training｜网球·体能·饮食",
+  "short_name": "Leon训练",
+  "description": "按日期记录网球、力量训练与营养目标",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#10171c",
+  "theme_color": "#10171c",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
