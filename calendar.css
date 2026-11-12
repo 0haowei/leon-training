@@ -1,0 +1,5 @@
+.calendar-panel label{display:block;color:#b6c3c9;font-size:13px;margin-top:14px}
+.calendar-panel input,.calendar-panel select{display:block;width:100%;box-sizing:border-box;margin-top:7px;border:1px solid #536b70;border-radius:8px;background:#102025;color:#eaf0f2;padding:10px;font-size:16px}
+.calendar-panel summary{cursor:pointer;color:#b5f1cb;padding:8px 0}
+.calendar-panel .title,.calendar-panel .muted,.calendar-panel .desc{overflow-wrap:anywhere}
+.calendar-panel button:focus-visible,.calendar-panel summary:focus-visible{outline:2px solid #b5f1cb;outline-offset:3px}
